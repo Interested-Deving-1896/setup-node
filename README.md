@@ -1,34 +1,29 @@
+[update-readmes]   Mode: rewrite — migrating to template structure...
 # setup-node
 
-[![basic-validation](https://github.com/actions/setup-node/actions/workflows/basic-validation.yml/badge.svg)](https://github.com/actions/setup-node/actions/workflows/basic-validation.yml)
-[![versions](https://github.com/actions/setup-node/actions/workflows/versions.yml/badge.svg)](https://github.com/actions/setup-node/actions/workflows/versions.yml)
-[![e2e-cache](https://github.com/actions/setup-node/actions/workflows/e2e-cache.yml/badge.svg?branch=main)](https://github.com/actions/setup-node/actions/workflows/e2e-cache.yml)
-[![proxy](https://github.com/actions/setup-node/actions/workflows/proxy.yml/badge.svg)](https://github.com/actions/setup-node/actions/workflows/proxy.yml)
+[![Built with Ona](https://ona.com/build-with-ona.svg)](https://app.ona.com/#https://github.com/Interested-Deving-1896/setup-node)
 
-This action provides the following functionality for GitHub Actions users:
+<!-- AI:start:what-it-does -->
+_Description pending._
+<!-- AI:end:what-it-does -->
 
-- Optionally downloading and caching distribution of the requested Node.js version, and adding it to the PATH
-- Optionally caching npm/yarn/pnpm dependencies
-- Registering problem matchers for error output
-- Configuring authentication for GPR or npm
+## Architecture
 
-## Breaking changes in V6
+<!-- AI:start:architecture -->
+_Architecture documentation pending._
+<!-- AI:end:architecture -->
 
-- Caching is now automatically enabled for npm projects when either the `devEngines.packageManager` field or the top-level `packageManager` field in `package.json` is set to `npm`. For other package managers, such as Yarn and pnpm, caching is disabled by default and must be configured manually using the `cache` input.
+## Install
 
-- The `always-auth` input has been removed, as it is deprecated and will no longer be supported in future npm releases. To ensure your workflows continue to run without warnings or errors, please remove any references to `always-auth` from your configuration.
+<!-- Add installation instructions here. This section is yours — the AI will not modify it. -->
 
-## Breaking changes in V5
-
-- Enabled caching by default with package manager detection if no cache input is provided.
-  > For workflows with elevated privileges or access to sensitive information, we recommend disabling automatic caching by setting `package-manager-cache: false` when caching is not needed for secure operation.
-
-- Upgraded action from node20 to node24.
-  > Make sure your runner is on version v2.327.1 or later to ensure compatibility with this release. [See Release Notes](https://github.com/actions/runner/releases/tag/v2.327.1)
-
-For more details, see the full release notes on the [releases page](https://github.com/actions/setup-node/releases/v5.0.0)
+```bash
+git clone https://github.com/Interested-Deving-1896/setup-node.git
+cd setup-node
+```
 
 ## Usage
+
 
 See [action.yml](action.yml)
 
@@ -150,124 +145,50 @@ Since it will not be cached always, there is possibility of hitting rate limit w
 
 It's **strongly recommended** to commit the lockfile of your package manager for security and performance reasons. For more information consult the "Working with lockfiles" section of the [Advanced usage](docs/advanced-usage.md#working-with-lockfiles) guide.
 
-## Caching global packages data
+## Configuration
 
-The action has a built-in functionality for caching and restoring dependencies. It uses [actions/cache](https://github.com/actions/cache) under the hood for caching global packages data but requires less configuration settings. Supported package managers are `npm`, `yarn`, `pnpm` (v6.10+). The `cache` input is optional.
+<!-- Document configuration options here. This section is yours — the AI will not modify it. -->
 
-The action defaults to search for the dependency file (`package-lock.json`, `npm-shrinkwrap.json` or `yarn.lock`) in the repository root, and uses its hash as a part of the cache key. Use `cache-dependency-path` for cases when multiple dependency files are used, or they are located in different subdirectories.
+## CI
 
-**Note:** The action does not cache `node_modules`
+<!-- AI:start:ci -->
+_CI documentation pending._
+<!-- AI:end:ci -->
 
-See the examples of using cache for `yarn`/`pnpm` and `cache-dependency-path` input in the [Advanced usage](docs/advanced-usage.md#caching-packages-data) guide.
+## Mirror chain
 
-**Caching npm dependencies:**
+<!-- AI:start:mirror-chain -->
+This repo is maintained in [`Interested-Deving-1896/setup-node`](https://github.com/Interested-Deving-1896/setup-node) and mirrored through:
 
-```yaml
-steps:
-- uses: actions/checkout@v6
-- uses: actions/setup-node@v6
-  with:
-    node-version: 24
-    cache: 'npm'
-- run: npm ci
-- run: npm test
+```
+Interested-Deving-1896/setup-node  ──►  OpenOS-Project-OSP/setup-node  ──►  OpenOS-Project-Ecosystem-OOC/setup-node
 ```
 
-**Caching npm dependencies in monorepos:**
+Changes flow downstream automatically via the hourly mirror chain in
+[`fork-sync-all`](https://github.com/Interested-Deving-1896/fork-sync-all).
+Direct commits to OSP or OOC are detected and opened as PRs back to `Interested-Deving-1896`.
+<!-- AI:end:mirror-chain -->
 
-```yaml
-steps:
-- uses: actions/checkout@v6
-- uses: actions/setup-node@v6
-  with:
-    node-version: 24
-    cache: 'npm'
-    cache-dependency-path: subdir/package-lock.json
-- run: npm ci
-- run: npm test
-```
+## Contributors
 
-Caching for npm dependencies is automatically enabled when your `package.json` contains either `devEngines.packageManager` field or top-level `packageManager` field set to `npm`, and no explicit cache input is provided.
+<!-- AI:start:contributors -->
+_Contributors pending._
+<!-- AI:end:contributors -->
 
-This behavior is controlled by the `package-manager-cache` input, which defaults to `true`. To turn off automatic caching, set `package-manager-cache` to `false`.
+## Origins
 
-```yaml
-steps:
-- uses: actions/checkout@v6
-- uses: actions/setup-node@v6
-  with:
-    package-manager-cache: false
-- run: npm ci
-```
-> If your `package.json` file does not include a `packageManager` field set to `npm`, caching will be disabled unless you explicitly enable it. For workflows with elevated privileges or access to sensitive information, we recommend disabling automatic caching for npm by setting `package-manager-cache: false` when caching is not required for secure operation.
+<!-- AI:start:origins -->
+_Original project — no upstream fork._
+<!-- AI:end:origins -->
 
-## Matrix Testing
+## Resources
 
-```yaml
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node: [ 20, 22, 24 ]
-    name: Node ${{ matrix.node }} sample
-    steps:
-      - uses: actions/checkout@v6
-      - name: Setup node
-        uses: actions/setup-node@v6
-        with:
-          node-version: ${{ matrix.node }}
-      - run: npm ci
-      - run: npm test
-```
-
-## Using `setup-node` on GHES
-
-`setup-node` comes pre-installed on the appliance with GHES if Actions is enabled. When dynamically downloading Nodejs distributions, `setup-node` downloads distributions from [`actions/node-versions`](https://github.com/actions/node-versions) on github.com (outside of the appliance). These calls to `actions/node-versions` are made via unauthenticated requests, which are limited to [60 requests per hour per IP](https://docs.github.com/en/rest/overview/resources-in-the-rest-api#rate-limiting). If more requests are made within the time frame, then you will start to see rate-limit errors during downloading that looks like: `##[error]API rate limit exceeded for...`. After that error the action will try to download versions directly from the official site, but it also can have rate limit so it's better to put token.
-
-To get a higher rate limit, you can [generate a personal access token on github.com](https://github.com/settings/tokens/new) and pass it as the `token` input for the action:
-
-```yaml
-uses: actions/setup-node@v6
-with:
-  token: ${{ secrets.GH_DOTCOM_TOKEN }}
-  node-version: 24
-```
-
-If the runner is not able to access github.com, any Nodejs versions requested during a workflow run must come from the runner's tool cache. See "[Setting up the tool cache on self-hosted runners without internet access](https://docs.github.com/en/enterprise-server@3.2/admin/github-actions/managing-access-to-actions-from-githubcom/setting-up-the-tool-cache-on-self-hosted-runners-without-internet-access)" for more information.
-
-## Advanced usage
-
- - [Check latest version](docs/advanced-usage.md#check-latest-version)
- - [Using a node version file](docs/advanced-usage.md#node-version-file)
- - [Using different architectures](docs/advanced-usage.md#architecture)
- - [Using v8 canary versions](docs/advanced-usage.md#v8-canary-versions)
- - [Using nightly versions](docs/advanced-usage.md#nightly-versions)
- - [Using rc versions](docs/advanced-usage.md#rc-versions)
- - [Caching packages data](docs/advanced-usage.md#caching-packages-data)
- - [Using multiple operating systems and architectures](docs/advanced-usage.md#multiple-operating-systems-and-architectures)
- - [Publishing to npmjs and GPR with npm](docs/advanced-usage.md#publish-to-npmjs-and-gpr-with-npm)
- - [Publishing to npmjs and GPR with yarn](docs/advanced-usage.md#publish-to-npmjs-and-gpr-with-yarn)
- - [Using private packages](docs/advanced-usage.md#use-private-packages)
- - [Using private mirror](docs/advanced-usage.md#use-private-mirror)
-
-## Recommended permissions
-
-When using the `setup-node` action in your GitHub Actions workflow, it is recommended to set the following permissions to ensure proper functionality:
-
-```yaml
-permissions:
-  contents: read # access to check out code and install dependencies
-```
+<!-- AI:start:resources -->
+_No additional resource files found._
+<!-- AI:end:resources -->
 
 ## License
 
-The scripts and documentation in this project are released under the [MIT License](LICENSE)
-
-## Contributions
-
-Contributions are welcome! See [Contributor's Guide](docs/contributors.md)
-
-## Code of Conduct
-
-:wave: Be nice. See [our code of conduct](CODE_OF_CONDUCT.md)
+<!-- AI:start:license -->
+[MIT](https://github.com/Interested-Deving-1896/setup-node/blob/main/LICENSE) © 2026 [Interested-Deving-1896](https://github.com/Interested-Deving-1896)
+<!-- AI:end:license -->
